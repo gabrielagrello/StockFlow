@@ -1,76 +1,70 @@
-📦 StockMaster — Sistema de Controle de Estoque
+# 📦 StockMaster — Sistema de Controle de Estoque
 
-Um sistema moderno de gestão de estoque, desenvolvido em React, com arquitetura organizada, componentes reutilizáveis e persistência local via API interna.
+Um sistema moderno de **gestão de estoque**, desenvolvido em **React**, com arquitetura organizada, componentes reutilizáveis e persistência local via API interna.  
 Projetado para ser escalável, modular e pronto para evoluir para um SaaS completo.
 
-🚀 Funcionalidades Principais
+---
 
-📊 Dashboard de Estoque
+## 🚀 Funcionalidades Principais
+
+### 📊 Dashboard de Estoque  
 Visão geral dos produtos cadastrados, quantidades e indicadores básicos.
 
-📦 Gestão de Produtos (CRUD Completo)
+### 📦 Gestão de Produtos (CRUD Completo)  
 Adicione, edite e exclua produtos com interface amigável.
 
-🗂️ Persistência Local
+### 🗂️ Persistência Local  
 Salvamento e leitura via API interna (simulação), podendo ser facilmente substituída por backend real.
 
-🧭 Navegação por Views
+### 🧭 Navegação por Views  
 Sidebar moderna com páginas:
 
-Dashboard
+- Dashboard  
+- Produtos  
+- Entradas *(em desenvolvimento)*  
+- Saídas *(em desenvolvimento)*  
+- Configurações *(em desenvolvimento)*  
 
-Produtos
+### 🧱 Arquitetura Componentizada  
+Layout, páginas, hooks, API e dados separados em pastas para facilitar manutenção.
 
-Entradas (em desenvolvimento)
+### 🎨 Styled Components + Tema Global  
+Estilização consistente, modular e de fácil expansão.
 
-Saídas (em desenvolvimento)
+---
 
-Configurações (em desenvolvimento)
+## 🛠️ Tecnologias Utilizadas
 
-🧱 Arquitetura Componentizada
-Layout, páginas, hooks, API e dados separados em pastas.
+| Tecnologia           | Uso                                       |
+|----------------------|--------------------------------------------|
+| **React**            | Interface e gerenciamento de estado        |
+| **Styled Components** | Estilos no padrão CSS-in-JS              |
+| **React Hooks**      | Lógica de estado e ciclo de vida           |
+| **API Simulada**     | Mock para armazenamento de produtos        |
+| **LocalStorage**     | Persistência dos dados                     |
 
-🎨 Styled Components + Tema Global
-Estilização consistente e fácil de expandir.
+---
 
-🛠️ Tecnologias Utilizadas
-Tecnologia	              Uso
-React	                    Interface e gerenciamento de estado
-Styled Components	        Estilos no padrão CSS-in-JS
-React Hooks	              Lógica de estado e ciclo de vida
-API Simulada	            Mock de armazenamento de produtos
-LocalStorage	            Persistência dos dados
+## 🧪 Futuras Implementações
 
-🧪 Futuras Implementações :
+- 🔄 Sistema de Entradas de Estoque  
+- 📤 Sistema de Saídas de Estoque  
+- 🔐 Login e autenticação JWT  
+- 🌐 Backend em Node.js + Prisma  
+- 📊 Relatórios e gráficos  
+- 🧾 Exportação de dados  
+- ☁️ Migração para API real (REST ou GraphQL)
 
-🔄 Sistema de Entradas de Estoque
+---
 
-📤 Sistema de Saídas de Estoque
-
-🔐 Login e autenticação JWT
-
-🌐 Backend em Node.js + Prisma
-
-📊 Relatórios e gráficos
-
-🧾 Exportação de dados
-
-☁️ Migração para API real (REST ou GraphQL)
-
-Padrão de Commits (Conventional Commits)
+## 📝 Padrão de Commits (Conventional Commits)
 
 Este projeto segue o padrão:
 
-feat: nova funcionalidade
-
-fix: correção de bug
-
-chore: tarefas internas
-
-docs: documentação
-
-refactor: melhoria interna no código sem alterar comportamento
-
-style: ajustes de layout/código sem lógica
-
-test: testes automatizados
+- **feat:** nova funcionalidade  
+- **fix:** correção de bug  
+- **chore:** tarefas internas  
+- **docs:** documentação  
+- **refactor:** melhoria interna sem alterar comportamento  
+- **style:** ajustes de layout/código sem lógica  
+- **test:** testes automatizados  
