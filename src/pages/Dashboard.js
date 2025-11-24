@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { TrendingUp, TrendingDown, Package, AlertTriangle } from "lucide-react";
 import { Card } from "../styles/GlobalStyles";
+import InventoryCharts from "../components/charts/InventoryCharts";
 
 const DashboardContainer = styled.div`
   max-width: 1200px;
@@ -146,6 +147,8 @@ const Dashboard = ({ inventoryData }) => {
           </StatCard>
         ))}
       </DashboardGrid>
+
+      <InventoryCharts products={products} movements={[]} />
 
       <RecentActivity>
         <h2 style={{ marginBottom: "1rem" }}>Atividade Recente</h2>

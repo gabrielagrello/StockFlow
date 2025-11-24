@@ -1,67 +1,75 @@
 import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import { GlobalStyles, theme } from "./styles/GlobalStyles";
-import Header from "./components/layout/Header";
-import Sidebar from "./components/layout/Sidebar";
-import Dashboard from "./pages/Dashboard";
-import ProductList from "./components/inventory/ProductList";
+import AppRouter from "./AppRouter";
 import ProductForm from "./components/inventory/ProductForm";
 import { inventoryAPI } from "./services/api";
 import { initialProducts } from "./data/initialData";
 
-
-const AppContainer = styled.div`
-  min-height: 100vh;
-  background-color: #f8fafc;
-`;
-
-const MainLayout = styled.div`
-  display: flex;
-  min-height: calc(100vh - 80px);
-`;
-
-const SidebarContainer = styled.div`
-  width: 250px;
-  flex-shrink: 0;
-`;
-
-const MainContent = styled.main`
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
-`;
-
 function App() {
-  const [activeView, setActiveView] = useState("dashboard");
   const [products, setProducts] = useState([]);
+  const [movements, setMovements] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Carregar produtos
+  // Carregar dados iniciais
   useEffect(() => {
-    loadProducts();
+    loadInitialData();
   }, []);
 
-  const loadProducts = async () => {
+  // Verificar estoque baixo
+  useEffect(() => {
+    if (products.length > 0) {
+      checkLowStock();
+    }
+  }, [products]);
+
+  const loadInitialData = async () => {
     try {
       setIsLoading(true);
-      let data = await inventoryAPI.getProducts();
+      const [productsData, movementsData] = await Promise.all([
+        inventoryAPI.getProducts(),
+        inventoryAPI.getMovements(),
+      ]);
 
-      // Se não houver dados, usar dados iniciais
-      if (data.length === 0) {
-        data = initialProducts;
-        await inventoryAPI.saveProducts(data);
+      // Se não houver produtos, usar dados iniciais
+      if (productsData.length === 0) {
+        await inventoryAPI.saveProducts(initialProducts);
+        setProducts(initialProducts);
+      } else {
+        setProducts(productsData);
       }
 
-      setProducts(data);
+      setMovements(movementsData);
     } catch (error) {
-      console.error("Erro ao carregar produtos:", error);
+      console.error("Erro ao carregar dados:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const checkLowStock = () => {
+    const lowStockProducts = products.filter(
+      (product) => product.quantity > 0 && product.quantity <= product.minStock
+    );
+
+    const newNotifications = lowStockProducts.map((product) => ({
+      id: `low-stock-${product.id}-${Date.now()}`,
+      type: "warning",
+      title: "Estoque Baixo",
+      message: `${product.name} está com estoque baixo (${product.quantity} unidades)`,
+    }));
+
+    setNotifications(newNotifications);
+  };
+
+  const handleDismissNotification = (notificationId) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
+  };
+
+  // Handlers para produtos
   const handleAddProduct = () => {
     setEditingProduct(null);
     setIsFormOpen(true);
@@ -75,7 +83,6 @@ function App() {
   const handleSaveProduct = async (productData) => {
     try {
       if (editingProduct) {
-        // Atualizar produto existente
         const updatedProduct = await inventoryAPI.updateProduct(
           editingProduct.id,
           productData
@@ -84,10 +91,11 @@ function App() {
           prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
         );
       } else {
-        // Adicionar novo produto
         const newProduct = await inventoryAPI.addProduct(productData);
         setProducts((prev) => [...prev, newProduct]);
       }
+      setIsFormOpen(false);
+      setEditingProduct(null);
     } catch (error) {
       console.error("Erro ao salvar produto:", error);
       alert("Erro ao salvar produto. Tente novamente.");
@@ -106,144 +114,49 @@ function App() {
     }
   };
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "200px",
-          }}
-        >
-          <div>Carregando produtos...</div>
-        </div>
+  // Handler para movimentações
+  const handleStockMovement = async (movementData) => {
+    try {
+      const result = await inventoryAPI.processMovement(movementData);
+      setProducts((prev) =>
+        prev.map((p) => (p.id === result.product.id ? result.product : p))
       );
-    }
-
-    switch (activeView) {
-      case "dashboard":
-        return <Dashboard inventoryData={{ products }} />;
-      case "products":
-        return (
-          <div>
-            <h1
-              style={{
-                marginBottom: "2rem",
-                fontSize: "2rem",
-                fontWeight: "700",
-              }}
-            >
-              Gerenciar Produtos
-            </h1>
-            <ProductList
-              products={products}
-              onEdit={handleEditProduct}
-              onDelete={handleDeleteProduct}
-              onAddProduct={handleAddProduct}
-            />
-          </div>
-        );
-      case "entries":
-        return (
-          <div>
-            <h1
-              style={{
-                marginBottom: "2rem",
-                fontSize: "2rem",
-                fontWeight: "700",
-              }}
-            >
-              Entradas de Estoque
-            </h1>
-            <div
-              style={{
-                background: "white",
-                padding: "2rem",
-                borderRadius: "0.75rem",
-                textAlign: "center",
-              }}
-            >
-              <p>Funcionalidade em desenvolvimento...</p>
-            </div>
-          </div>
-        );
-      case "outputs":
-        return (
-          <div>
-            <h1
-              style={{
-                marginBottom: "2rem",
-                fontSize: "2rem",
-                fontWeight: "700",
-              }}
-            >
-              Saídas de Estoque
-            </h1>
-            <div
-              style={{
-                background: "white",
-                padding: "2rem",
-                borderRadius: "0.75rem",
-                textAlign: "center",
-              }}
-            >
-              <p>Funcionalidade em desenvolvimento...</p>
-            </div>
-          </div>
-        );
-      case "settings":
-        return (
-          <div>
-            <h1
-              style={{
-                marginBottom: "2rem",
-                fontSize: "2rem",
-                fontWeight: "700",
-              }}
-            >
-              Configurações
-            </h1>
-            <div
-              style={{
-                background: "white",
-                padding: "2rem",
-                borderRadius: "0.75rem",
-                textAlign: "center",
-              }}
-            >
-              <p>Funcionalidade em desenvolvimento...</p>
-            </div>
-          </div>
-        );
-      default:
-        return <Dashboard inventoryData={{ products }} />;
+      setMovements((prev) => [...prev, result.movement]);
+    } catch (error) {
+      console.error("Erro ao processar movimentação:", error);
+      alert("Erro ao processar movimentação. Tente novamente.");
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <AppContainer>
-        <Header />
-        <MainLayout>
-          <SidebarContainer>
-            <Sidebar activeView={activeView} setActiveView={setActiveView} />
-          </SidebarContainer>
-          <MainContent>{renderContent()}</MainContent>
-        </MainLayout>
 
-        <ProductForm
-          product={editingProduct}
-          isOpen={isFormOpen}
-          onClose={() => setIsFormOpen(false)}
-          onSave={handleSaveProduct}
-        />
-      </AppContainer>
+      <AppRouter
+        products={products}
+        movements={movements}
+        isLoading={isLoading}
+        onAddProduct={handleAddProduct}
+        onEditProduct={handleEditProduct}
+        onDeleteProduct={handleDeleteProduct}
+        onSaveProduct={handleSaveProduct}
+        onStockMovement={handleStockMovement}
+        notifications={notifications}
+        onDismissNotification={handleDismissNotification}
+      />
+
+      {/* Modal de produto (mantido fora do router para overlay global) */}
+      <ProductForm
+        product={editingProduct}
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingProduct(null);
+        }}
+        onSave={handleSaveProduct}
+      />
     </ThemeProvider>
   );
 }
-
 
 export default App;

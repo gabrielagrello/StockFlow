@@ -1,11 +1,13 @@
-// Simulação de API local - em produção, substituir por endpoints reais
-const STORAGE_KEY = "inventory-data";
+const STORAGE_KEYS = {
+  PRODUCTS: "inventory-products",
+  MOVEMENTS: "inventory-movements",
+};
 
 export const inventoryAPI = {
   // Buscar todos os produtos
   getProducts: async () => {
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
+      const data = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
       return data ? JSON.parse(data) : [];
     } catch (error) {
       console.error("Erro ao carregar produtos:", error);
@@ -16,7 +18,7 @@ export const inventoryAPI = {
   // Salvar produtos
   saveProducts: async (products) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+      localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
       return products;
     } catch (error) {
       console.error("Erro ao salvar produtos:", error);
@@ -59,5 +61,55 @@ export const inventoryAPI = {
     const filteredProducts = products.filter((p) => p.id !== id);
     await inventoryAPI.saveProducts(filteredProducts);
     return true;
+  },
+
+  // Movimentações
+  getMovements: async () => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.MOVEMENTS);
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
+      console.error("Erro ao carregar movimentações:", error);
+      return [];
+    }
+  },
+
+  addMovement: async (movement) => {
+    const movements = await inventoryAPI.getMovements();
+    const newMovement = {
+      ...movement,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+    };
+    movements.push(newMovement);
+    localStorage.setItem(STORAGE_KEYS.MOVEMENTS, JSON.stringify(movements));
+    return newMovement;
+  },
+
+  // Método para processar movimentação e atualizar produto
+  processMovement: async (movement) => {
+    const products = await inventoryAPI.getProducts();
+    const productIndex = products.findIndex((p) => p.id === movement.productId);
+
+    if (productIndex !== -1) {
+      const product = products[productIndex];
+      const newQuantity =
+        movement.type === "entrada"
+          ? product.quantity + movement.quantity
+          : product.quantity - movement.quantity;
+
+      products[productIndex] = {
+        ...product,
+        quantity: newQuantity,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await inventoryAPI.saveProducts(products);
+      const savedMovement = await inventoryAPI.addMovement(movement);
+
+      return { product: products[productIndex], movement: savedMovement };
+    }
+
+    throw new Error("Produto não encontrado");
   },
 };

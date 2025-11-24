@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Package, Bell, User } from "lucide-react";
+import { Package, Bell, User, Menu } from "lucide-react";
 
 const HeaderContainer = styled.header`
   background: white;
@@ -52,13 +52,32 @@ const IconButton = styled.button`
   }
 `;
 
-const Header = () => {
+const MenuButton = styled.button`
+  display: none;
+  background: none;
+  padding: 0.5rem;
+  border-radius: ${(props) => props.theme.borderRadius.md};
+  color: ${(props) => props.theme.colors.text.secondary};
+
+  &:hover {
+    background: #f1f5f9;
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const Header = ({ onMenuToggle }) => {
   return (
     <HeaderContainer>
       <HeaderContent>
         <Logo>
+          <MenuButton onClick={onMenuToggle}>
+            <Menu size={20} />
+          </MenuButton>
           <Package />
-          StockControl
+          <span>StockControl</span>
         </Logo>
 
         <HeaderActions>
