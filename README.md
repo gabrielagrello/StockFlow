@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+📦 StockMaster — Sistema de Controle de Estoque
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Um sistema moderno de gestão de estoque, desenvolvido em React, com arquitetura organizada, componentes reutilizáveis e persistência local via API interna.
+Projetado para ser escalável, modular e pronto para evoluir para um SaaS completo.
 
-## Available Scripts
+🚀 Funcionalidades Principais
 
-In the project directory, you can run:
+📊 Dashboard de Estoque
+Visão geral dos produtos cadastrados, quantidades e indicadores básicos.
 
-### `npm start`
+📦 Gestão de Produtos (CRUD Completo)
+Adicione, edite e exclua produtos com interface amigável.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🗂️ Persistência Local
+Salvamento e leitura via API interna (simulação), podendo ser facilmente substituída por backend real.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🧭 Navegação por Views
+Sidebar moderna com páginas:
 
-### `npm test`
+Dashboard
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Produtos
 
-### `npm run build`
+Entradas (em desenvolvimento)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Saídas (em desenvolvimento)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Configurações (em desenvolvimento)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🧱 Arquitetura Componentizada
+Layout, páginas, hooks, API e dados separados em pastas.
 
-### `npm run eject`
+🎨 Styled Components + Tema Global
+Estilização consistente e fácil de expandir.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+🛠️ Tecnologias Utilizadas
+Tecnologia	              Uso
+React	                    Interface e gerenciamento de estado
+Styled Components	        Estilos no padrão CSS-in-JS
+React Hooks	              Lógica de estado e ciclo de vida
+API Simulada	            Mock de armazenamento de produtos
+LocalStorage	            Persistência dos dados
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+🧪 Futuras Implementações :
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+🔄 Sistema de Entradas de Estoque
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+📤 Sistema de Saídas de Estoque
 
-## Learn More
+🔐 Login e autenticação JWT
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+🌐 Backend em Node.js + Prisma
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+📊 Relatórios e gráficos
 
-### Code Splitting
+🧾 Exportação de dados
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+☁️ Migração para API real (REST ou GraphQL)
 
-### Analyzing the Bundle Size
+Padrão de Commits (Conventional Commits)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Este projeto segue o padrão:
 
-### Making a Progressive Web App
+feat: nova funcionalidade
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+fix: correção de bug
 
-### Advanced Configuration
+chore: tarefas internas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+docs: documentação
 
-### Deployment
+refactor: melhoria interna no código sem alterar comportamento
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+style: ajustes de layout/código sem lógica
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+test: testes automatizados
